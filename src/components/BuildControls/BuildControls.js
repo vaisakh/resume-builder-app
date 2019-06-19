@@ -10,7 +10,7 @@ import Success from './Success/Success';
 
 class BuildControls extends Component {
   state = {
-    page: 2,
+    page: 1,
     formElements: {
       personal: {
         name: {
@@ -39,6 +39,16 @@ class BuildControls extends Component {
             type: 'text',
             name: 'phone',
             placeholder: 'Your Phone',
+            required: 'required'
+          },
+          value: ''
+        },
+        address: {
+          elementType: 'textarea',
+          elementConfig: {
+            type: 'text',
+            name: 'address',
+            placeholder: 'Your Address',
             required: 'required'
           },
           value: ''
@@ -209,7 +219,6 @@ class BuildControls extends Component {
   }
 
   inputChangedHandler = (event, inputIdentifier) => {
-    console.log('[InputChangedHandler]', event.target);
     const updatedForm = {
       ...this.state.formElements
     };
@@ -223,7 +232,6 @@ class BuildControls extends Component {
     };
     updatedFormElement.value = event.target.value;
     updatedForm[inputIdentifier][event.target.name] = updatedFormElement;
-    console.log(inputIdentifier);
     this.setState({formElements: updatedForm});
   }
 

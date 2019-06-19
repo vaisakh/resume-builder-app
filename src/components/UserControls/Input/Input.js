@@ -12,7 +12,11 @@ const input = ( props ) => {
         onChange={props.changed} />;
       break;
       case( 'textarea' ):
-        inputElement = <textarea {...props} />
+      inputElement = <textarea
+        className="form-control"
+       {...props.elementConfig}
+        value={props.value}
+        onChange={props.changed}/>
         break;
     default:
       inputElement = <input {...props} />;
