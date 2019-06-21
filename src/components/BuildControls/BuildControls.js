@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import Aux from '../../hoc/Aux';
 
-import PersonalDetails from './PersonalDetails/PersonalDetails';
-import Experience from './Experience/Experience';
-import Education from './Education/Education';
-import Projects from './Projects/Projects';
-import Misc from './Misc/Misc';
+import PersonalDetailsForm from './PersonalDetails/PersonalDetailsForm';
+import ExperienceForm from './Experience/ExperienceForm';
+import EducationForm from './Education/EducationForm';
+import ProjectsForm from './Projects/ProjectsForm';
+import MiscForm from './Misc/MiscForm';
 import Success from './Success/Success';
 
 
@@ -14,34 +14,11 @@ class BuildControls extends Component {
     page: 1,
     formElements: {
     },
+    PersonalDetailsForm: {}
   }
 
   componentDidMount() {
     //this.refEl.focus();
-  }
-
-  formSubmitHandler = (event) => {
-    event.preventDefault();
-    this.setState({page: this.state.page+1});
-  }
-
-  inputChangedHandler = (event, inputIdentifier) => {
-    const updatedForm = {
-      ...this.state.formElements
-    };
-
-    const identifierElement = {
-      ...updatedForm[inputIdentifier][inputIdentifier]
-    };
-    console.log(updatedForm[inputIdentifier][inputIdentifier]);
-
-    const updatedFormElement = {
-      ...identifierElement[event.target.name]
-    };
-
-    updatedFormElement.value = event.target.value;
-    updatedForm[inputIdentifier][inputIdentifier][event.target.name] = updatedFormElement;
-    this.setState({formElements: updatedForm});
   }
 
   nextPageHandler = (event) => {
@@ -54,6 +31,12 @@ class BuildControls extends Component {
     this.setState({page: page - 1});
   }
 
+  onSubmitHandler = (formElements, formIdentifier) => {
+    console.log('[App Component] ->', formIdentifier, formElements);
+    const page = this.state.page;
+    this.setState({ formIdentifier: formElements })
+    this.setState({ page: page + 1 });
+  }
 
   render () {
 
@@ -61,42 +44,38 @@ class BuildControls extends Component {
     let wizardForm = null;
 
     switch(page) {
-      case 1: return(
-        wizardForm = <PersonalDetails
-          formSubmit={this.formSubmitHandler}
-          nextPage={this.nextPageHandler}
+      case 1: (
+        wizardForm = <PersonalDetailsForm
+          onSubmit={(formElements, formIdentifier) =>
+              this.onSubmitHandler(formElements, formIdentifier)}
         />
       );
         break;
       case 2: (
-        wizardForm = <Experience
-          formSubmit={this.formSubmitHandler}
-          prevPage={this.previousPageHandler}
-          nextPage={this.nextPageHandler}
+        wizardForm = <ExperienceForm
+          onSubmit={(formElements, formIdentifier) =>
+              this.onSubmitHandler(formElements, formIdentifier)}
         />
       );
         break;
       case 3: (
-        wizardForm = <Education
-          formSubmit={this.formSubmitHandler}
-          prevPage={this.previousPageHandler}
-          nextPage={this.nextPageHandler}
-        />
-      );
+        wizardForm = <EducationForm
+          onSubmit={(formElements, formIdentifier) =>
+              this.onSubmitHandler(formElements, formIdentifier)}
+          />
+          );
         break;
         case 4: (
-        wizardForm = <Projects
-          formSubmit={this.formSubmitHandler}
-          prevPage={this.previousPageHandler}
-          nextPage={this.nextPageHandler}
-        />
+          wizardForm = <ProjectsForm
+            onSubmit={(formElements, formIdentifier) =>
+                this.onSubmitHandler(formElements, formIdentifier)}
+          />
       );
         break;
-        case 5: (
-        wizardForm = <Misc
-          formSubmit={this.formSubmitHandler}
-          prevPage={this.previousPageHandler}
-          nextPage={this.nextPageHandler}
+      case 5: (
+        wizardForm = <MiscForm
+          onSubmit={(formElements, formIdentifier) =>
+              this.onSubmitHandler(formElements, formIdentifier)}
         />
       );
         break;
@@ -105,7 +84,6 @@ class BuildControls extends Component {
       )
         break;
         default:
-
     }
 
     return(
