@@ -74,6 +74,7 @@ class MiscForm extends Component {
             <br />
 
             <div className="container text-center">
+              <button className="btn-info" onClick={this.props.previousPage}>Back</button>
               <button className="btn-info" onClick={(event) => this.onSubmitHandler(event)}>Next</button>
             </div>
             <br />

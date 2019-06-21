@@ -55,6 +55,7 @@ class BuildControls extends Component {
         wizardForm = <ExperienceForm
           onSubmit={(formElements, formIdentifier) =>
               this.onSubmitHandler(formElements, formIdentifier)}
+          previousPage={this.previousPageHandler}
         />
       );
         break;
@@ -62,6 +63,7 @@ class BuildControls extends Component {
         wizardForm = <EducationForm
           onSubmit={(formElements, formIdentifier) =>
               this.onSubmitHandler(formElements, formIdentifier)}
+          previousPage={this.previousPageHandler}
           />
           );
         break;
@@ -69,6 +71,7 @@ class BuildControls extends Component {
           wizardForm = <ProjectsForm
             onSubmit={(formElements, formIdentifier) =>
                 this.onSubmitHandler(formElements, formIdentifier)}
+          previousPage={this.previousPageHandler}
           />
       );
         break;
@@ -76,6 +79,7 @@ class BuildControls extends Component {
         wizardForm = <MiscForm
           onSubmit={(formElements, formIdentifier) =>
               this.onSubmitHandler(formElements, formIdentifier)}
+          previousPage={this.previousPageHandler}
         />
       );
         break;
