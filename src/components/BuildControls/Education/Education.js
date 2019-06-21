@@ -3,17 +3,18 @@ import Aux from '../../../hoc/Aux';
 //import Input from '../../UserControls/Input/Input';
 
 
-class Experience extends Component {
+class Education extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       formElements: {
-        experience: {
-          organization1: {
-            organization1: { elementType: 'input', elementConfig: { type: 'text', name: 'organization1', placeholder: 'Organization' }, value: '' },
-            position1: { elementType: 'input', elementConfig: { type: 'text', name: 'position1', placeholder: 'Position' }, value: '' },
-            duration1: { elementType: 'input', elementConfig: { type: 'text', name: 'duration1', placeholder: 'Duration' }, value: '' },
-            description1: { elementType: 'input', elementConfig: { type: 'text', name: 'description1', placeholder: 'Description' }, value: '' }
+        education: {
+          education1: {
+            college1: { elementType: 'input', elementConfig: { type: 'text', name: 'college1', placeholder: 'College' }, value: '' },
+            year1: { elementType: 'input', elementConfig: { type: 'text', name: 'year1', placeholder: 'Year' }, value: '' },
+            qualification1: { elementType: 'input', elementConfig: { type: 'text', name: 'qualification1', placeholder: 'Qualification' }, value: '' },
+            description1: { elementType: 'input', elementConfig: { type: 'text', name: 'description1', placeholder: 'Description' }, value: '' },
           }
         }
       }};
@@ -25,7 +26,7 @@ class Experience extends Component {
     };
 
     const updatedExperienceElEl = {
-      ...updatedForm.experience
+      ...updatedForm.education
     }
 
     const identifierElement = {
@@ -47,17 +48,17 @@ class Experience extends Component {
       ...this.state.formElements
     };
 
-    let elKeys = Object.keys(formElements['experience']);
+    let elKeys = Object.keys(formElements['education']);
     let lastKey = elKeys[elKeys.length - 1];
     let lastKeyIndex = parseInt(lastKey.charAt(lastKey.length - 1)) + 1;
     let newEl = {};
 
-    newEl['organization'+lastKeyIndex] = { elementType: 'input', elementConfig: { type: 'text', name: 'organization'+lastKeyIndex, placeholder: 'Organization' }, value: ''};
-    newEl['position'+lastKeyIndex] = {  elementType: 'input', elementConfig: { type: 'text', name: 'position1'+lastKeyIndex, placeholder: 'Position' }, value: '' };
-    newEl['duration'+lastKeyIndex] = {  elementType: 'input', elementConfig: { type: 'text', name: 'duration1'+lastKeyIndex, placeholder: 'Duration' }, value: '' };
-    newEl['description'+lastKeyIndex] = {  elementType: 'input', elementConfig: { type: 'text', name: 'description1'+lastKeyIndex, placeholder: 'Description' }, value: '' };
+    newEl['college'+lastKeyIndex] = { elementType: 'input', elementConfig: { type: 'text', name: 'college'+lastKeyIndex, placeholder: 'College' }, value: ''  };
+    newEl['year'+lastKeyIndex] = { elementType: 'input', elementConfig: { type: 'text', name: 'year'+lastKeyIndex, placeholder: 'Year' }, value: '' };
+    newEl['qualification'+lastKeyIndex] = { elementType: 'input', elementConfig: { type: 'text', name: 'qualification'+lastKeyIndex, placeholder: 'Qualification' }, value: '' };
+    newEl['description'+lastKeyIndex] = { elementType: 'input', elementConfig: { type: 'text', name: 'description'+lastKeyIndex, placeholder: 'Description' }, value: '' };
 
-    formElements['experience']['organization'+lastKeyIndex] = newEl;
+    formElements['education']['education'+lastKeyIndex] = newEl;
     this.setState({formElements: formElements});
   }
 
@@ -67,7 +68,7 @@ class Experience extends Component {
     const formElementsObj = {};
     const formElementsArray = [];
     //const formElements = this.props.formElements;
-    const formElements = this.state.formElements.experience;
+    const formElements = this.state.formElements.education;
 
     for(let key in formElements) {
       let divider = 'divider' + key.charAt(key.length - 1);
@@ -86,7 +87,7 @@ class Experience extends Component {
         <div className="container col-lg-8 mx-auto text-center">
           <div className="shadow border-0 card animated fadeInLeft">
             <div className="card-body">
-              <h3 className="card-title">Experience</h3>
+              <h3 className="card-title">Education</h3>
               <hr/>
             </div>
             <form onSubmit={this.props.formSubmit}>
@@ -132,4 +133,4 @@ class Experience extends Component {
 
 }
 
-export default Experience;
+export default Education;

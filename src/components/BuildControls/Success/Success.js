@@ -1,6 +1,5 @@
 import React from 'react';
 import Aux from '../../../hoc/Aux';
-import Input from '../../UserControls/Input/Input';
 
 const success = (props) => {
   return(
