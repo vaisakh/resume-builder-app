@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 class PersonalDetailsForm extends Component {
+
+  componentWillMount() {
+    console.log("Will Mount ->", this.props.personalInfo);
+    this.props.fetchPersonalInfo();
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -133,4 +140,12 @@ class PersonalDetailsForm extends Component {
   }
 }
 
-export default PersonalDetailsForm;
+const mapStateToProps = (state) => ({
+ personalInfo: state.personalInfo.name
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchPersonalInfo: () => dispatch( { type: 'FETCH_PERSONAL_INFO', payload: {name: 'Vaisakh'} } )
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PersonalDetailsForm);
