@@ -26,7 +26,7 @@ class PersonalDetailsForm extends Component {
   inputChangedHandler = (event) => {
     this.setState({
       [event.target.name]: event.target.value
-    })
+    });
   }
 
   onSubmitHandler = (event) => {

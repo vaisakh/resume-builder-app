@@ -12,9 +12,11 @@ import Success from './Success/Success';
 class BuildControls extends Component {
   state = {
     page: 1,
-    formElements: {
-    },
-    PersonalDetailsForm: {}
+    PersonalDetailsForm: {},
+    EducationForm: {},
+    ExperienceForm: {},
+    ProjectsForm: {},
+    MiscForm: {}
   }
 
   componentDidMount() {
@@ -33,9 +35,14 @@ class BuildControls extends Component {
 
   onSubmitHandler = (formElements, formIdentifier) => {
     console.log('[App Component] ->', formIdentifier, formElements);
+
+    this.setState({
+      [formIdentifier]: formElements
+    });
+
     const page = this.state.page;
-    this.setState({ formIdentifier: formElements })
     this.setState({ page: page + 1 });
+    console.log(this.state);
   }
 
   render () {
@@ -46,8 +53,7 @@ class BuildControls extends Component {
     switch(page) {
       case 1: (
         wizardForm = <PersonalDetailsForm
-          onSubmit={(formElements, formIdentifier) =>
-              this.onSubmitHandler(formElements, formIdentifier)}
+          onSubmit={(formElements, formIdentifier) => this.onSubmitHandler(formElements, formIdentifier)}
         />
       );
         break;
@@ -92,7 +98,7 @@ class BuildControls extends Component {
 
     return(
       <Aux>
-      {wizardForm }
+          {wizardForm }
       </Aux>
     );
   }
