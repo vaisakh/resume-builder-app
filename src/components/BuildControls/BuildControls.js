@@ -7,16 +7,19 @@ import EducationForm from './Education/EducationForm';
 import ProjectsForm from './Projects/ProjectsForm';
 import MiscForm from './Misc/MiscForm';
 import Success from './Success/Success';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { newPerson } from '../../actions/personalInfoActions';
+import { newWork } from '../../actions/workInfoActions';
+import { newEducation } from '../../actions/educationInfoActions';
+import { newProject } from '../../actions/projectInfoActions';
+import { newMisc } from '../../actions/miscInfoActions';
+
 
 
 class BuildControls extends Component {
   state = {
     page: 1,
-    PersonalDetailsForm: {},
-    EducationForm: {},
-    ExperienceForm: {},
-    ProjectsForm: {},
-    MiscForm: {}
   }
 
   componentDidMount() {
@@ -34,15 +37,28 @@ class BuildControls extends Component {
   }
 
   onSubmitHandler = (formElements, formIdentifier) => {
-    console.log('[App Component] ->', formIdentifier, formElements);
-
-    this.setState({
-      [formIdentifier]: formElements
-    });
+    switch ( formIdentifier ) {
+      case 'PersonalDetailsForm':
+        this.props.newPerson(formElements);
+        break;
+      case 'EducationForm':
+        this.props.newEducation(formElements);
+        break;
+      case 'ExperienceForm':
+        this.props.newWork(formElements);
+        break;
+      case 'ProjectsForm':
+        this.props.newProject(formElements);
+        break;
+      case 'MiscForm':
+        this.props.newMisc(formElements);
+        break;
+      default:
+        break;
+    }
 
     const page = this.state.page;
     this.setState({ page: page + 1 });
-    console.log(this.state);
   }
 
   render () {
@@ -102,6 +118,15 @@ class BuildControls extends Component {
       </Aux>
     );
   }
+}
+
+
+BuildControls.propTypes = {
+  newPerson: PropTypes.func.isRequired,
+  newWork: PropTypes.func.isRequired,
+  newEducation: PropTypes.func.isRequired,
+  newProject: PropTypes.func.isRequired,
+  newMisc: PropTypes.func.isRequired,
 };
 
-export default BuildControls;
+export default connect(null, {newPerson, newWork, newEducation, newProject, newMisc})(BuildControls);
