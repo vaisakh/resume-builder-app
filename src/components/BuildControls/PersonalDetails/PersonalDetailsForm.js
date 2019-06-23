@@ -81,7 +81,7 @@ class PersonalDetailsForm extends Component {
                 <input
                   className="form-control"
                   name="phone"
-                  type="text"
+                  type="number"
                   placeholder="Phone"
                   value={this.state.phone}
                   onChange={(event) => this.inputChangedHandler(event)}/>
