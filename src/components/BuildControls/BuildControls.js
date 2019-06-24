@@ -25,6 +25,9 @@ class BuildControls extends Component {
   componentDidMount() {
     //this.refEl.focus();
   }
+  componentWillMount() {
+    console.log( this.props.state)
+  }
 
   nextPageHandler = (event) => {
     const page = this.state.page;
@@ -129,4 +132,8 @@ BuildControls.propTypes = {
   newMisc: PropTypes.func.isRequired,
 };
 
-export default connect(null, {newPerson, newWork, newEducation, newProject, newMisc})(BuildControls);
+const mapStateToProps = state => ({
+  state: state
+})
+
+export default connect(mapStateToProps, {newPerson, newWork, newEducation, newProject, newMisc})(BuildControls);

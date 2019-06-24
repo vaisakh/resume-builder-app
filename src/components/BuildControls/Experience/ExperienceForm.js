@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Field, reduxForm  } from 'redux-form';
+
 
 class ExperienceForm extends Component {
   constructor(props) {
@@ -15,11 +17,11 @@ class ExperienceForm extends Component {
   }
 
   componentDidMount() {
-    this.focusTextInput();
+    //this.focusTextInput();
   }
 
   focusTextInput = () => {
-    this.textInput.current.focus();
+    //this.textInput.current.focus();
   }
 
   inputChangedHandler = (event) => {
@@ -28,18 +30,40 @@ class ExperienceForm extends Component {
     })
   }
 
-  onSubmitHandler = (event) => {
-    event.preventDefault();
-    this.props.onSubmit(this.state, this.formIdentifier);
-    this.setState({
-      organization: '',
-      position: '',
-      duration: '',
-      description: ''
-    });
+  onSubmitHandler = (values) => {
+    this.props.onSubmit(values, this.formIdentifier);
   }
 
+  renderInput = ({ input, meta, ...custom }) => {
+    return(
+      <div className={custom.wrapperclassname}>
+        <label>{custom.label}*</label>
+        <input
+          {...input}
+          {...custom}
+        />
+            { meta.error && meta.touched && <span className="form-text text-muted">{meta.error}</span> }
+          </div>
+    )
+  }
+
+  renderTextArea = ({ input, meta, ...custom }) => {
+    return(
+      <div className={custom.wrapperclassname}>
+        <label>{custom.label}*</label>
+        <textarea
+          {...input}
+          {...custom}
+        />
+            { meta.error && meta.touched && <span className="form-text text-muted">{meta.error}</span> }
+          </div>
+    )
+  }
+
+
   render () {
+    const { handleSubmit } = this.props;
+
     return (
       <div className="container col-lg-8 mx-auto text-center">
         <div className="shadow border-0 card animated fadeInLeft">
@@ -47,61 +71,56 @@ class ExperienceForm extends Component {
             <h3 className="card-title">Work Experience</h3>
             <hr/>
           </div>
-          <form>
+          <form onSubmit={ handleSubmit(this.onSubmitHandler) }>
 
             <div className="row col-lg-10 mx-auto">
-              <div className="col-lg-4 text-left">
-                <label>Organization*</label>
-                <input
-                  ref={ this.textInput }
+                <Field
                   className="form-control"
                   name="organization"
                   type="text"
                   placeholder="Organization"
-                  value={this.state.organization}
-                  onChange={(event) => this.inputChangedHandler(event)} />
-              </div>
-              <div className="col-lg-4 text-left">
-                <label>Postion*</label>
-                <input
+                  label="Organization"
+                  component={this.renderInput}
+                  wrapperclassname="col-lg-4 text-left"
+                />
+                <Field
                   className="form-control"
                   name="position"
                   type="text"
                   placeholder="Position"
-                  value={this.state.position}
-                  onChange={(event) => this.inputChangedHandler(event)}/>
-              </div>
+                  label="Position"
+                  component={this.renderInput}
+                  wrapperclassname="col-lg-4 text-left"
+               />
 
-              <div className="col-lg-4 text-left">
-                <label>Duration*</label>
-                <input
+                <Field
                   className="form-control"
                   name="duration"
                   type="text"
                   placeholder="Duration"
-                  value={this.state.duration}
-                  onChange={(event) => this.inputChangedHandler(event)}/>
-              </div>
+                  label="Duration"
+                  component={this.renderInput}
+                  wrapperclassname="col-lg-4 text-left"
+                />
             </div>
             <br />
 
             <div className="row col-lg-10 mx-auto">
-              <div className="col-lg-12 text-left">
-                <label>Description*</label>
-                <input
+                <Field
                   className="form-control"
                   name="description"
                   type="text"
                   placeholder="Description"
-                  value={this.state.description}
-                  onChange={(event) => this.inputChangedHandler(event)}/>
-            </div>
+                  label="Description"
+                  component={this.renderTextArea}
+                  wrapperclassname="col-lg-12 text-left"
+                />
           </div>
           <br />
 
           <div className="container text-center">
             <button className="btn-info" onClick={this.props.previousPage}>Back</button>
-            <button className="btn-info" onClick={(event) => this.onSubmitHandler(event)}>Next</button>
+            <button type="submit" className="btn-info">Next</button>
           </div>
           <br />
         </form>
@@ -113,5 +132,33 @@ class ExperienceForm extends Component {
     );
   }
 }
+
+const validate = values => {
+  const errors = {};
+
+  if(!values.organization) {
+    errors.organization = 'required';
+  }
+
+  if(!values.position) {
+    errors.position = 'required';
+  }
+
+  if(!values.duration) {
+    errors.duration = 'required';
+  }
+
+  if(!values.description) {
+    errors.description = 'required';
+  }
+
+  return errors;
+}
+
+ExperienceForm = reduxForm({
+  form: 'experience',
+  validate,
+  destroyOnUnmount: false
+})(ExperienceForm)
 
 export default ExperienceForm;

@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Field, reduxForm  } from 'redux-form';
+
 
 class PersonalDetailsForm extends Component {
 
@@ -17,11 +19,11 @@ class PersonalDetailsForm extends Component {
   }
 
   componentDidMount() {
-    this.focusTextInput();
+    //this.focusTextInput();
   }
 
   focusTextInput = () => {
-    this.textInput.current.focus();
+    //this.textInput.current.focus();
   }
 
   inputChangedHandler = (event) => {
@@ -30,19 +32,38 @@ class PersonalDetailsForm extends Component {
     });
   }
 
-  onSubmitHandler = (event) => {
-    event.preventDefault();
-    this.props.onSubmit(this.state, this.formIdentifier);
-    this.setState({
-      name: '',
-      email: '',
-      phone: '',
-      address: '',
-      skills: ''
-    });
+  onSubmitHandler = (values) => {
+    this.props.onSubmit(values, this.formIdentifier);
+  }
+
+  renderInput = ({ input, meta, ...custom }) => {
+    return(
+      <div className={custom.wrapperclassname}>
+        <label>{custom.label}*</label>
+        <input
+          {...input}
+          {...custom}
+        />
+            { meta.error && meta.touched && <span className="form-text text-muted">{meta.error}</span> }
+      </div>
+    )
+  }
+
+  renderTextArea = ({ input, meta, ...custom }) => {
+    return(
+      <div className={custom.wrapperclassname}>
+        <label>{custom.label}*</label>
+        <textarea
+          {...input}
+          {...custom}
+        />
+            { meta.error && meta.touched && <span className="form-text text-muted">{meta.error}</span> }
+          </div>
+    )
   }
 
   render () {
+    const { handleSubmit } = this.props;
     return(
 
       <div className="container col-lg-8 mx-auto text-center">
@@ -51,76 +72,68 @@ class PersonalDetailsForm extends Component {
             <h3 className="card-title">Personal Info</h3>
             <hr/>
           </div>
-          <form>
+          <form onSubmit={ handleSubmit(this.onSubmitHandler) }>
 
             <div className="row col-lg-10 mx-auto">
-              <div className="col-lg-4 text-left">
-                <label>Name*</label>
-                <input
-                  ref={this.textInput}
+                <Field
                   className="form-control"
                   name="name"
                   type="text"
                   placeholder="Name"
-                  value={this.state.name}
-                  onChange={(event) => this.inputChangedHandler(event)} />
-              </div>
-              <div className="col-lg-4 text-left">
-                <label>Email*</label>
-                <input
+                  component={this.renderInput}
+                  label="Name"
+                  wrapperclassname="col-lg-4 text-left"
+                />
+                <Field
                   className="form-control"
                   name="email"
                   type="email"
                   placeholder="Email"
-                  value={this.state.email}
-                  onChange={(event) => this.inputChangedHandler(event)}/>
-              </div>
+                  label="Email"
+                  component={this.renderInput}
+                  wrapperclassname="col-lg-4 text-left"
+                />
 
-              <div className="col-lg-4 text-left">
-                <label>Phone*</label>
-                <input
+                <Field
                   className="form-control"
                   name="phone"
                   type="number"
+                  label="Phone"
                   placeholder="Phone"
-                  value={this.state.phone}
-                  onChange={(event) => this.inputChangedHandler(event)}/>
-              </div>
+                  component={this.renderInput}
+                  wrapperclassname="col-lg-4 text-left"
+                />
             </div>
             <br />
 
             <div className="row col-lg-10 mx-auto">
-              <div className="col-lg-12 text-left">
-                <label>Address*</label>
-                <textarea
+                <Field
                   className="form-control"
                   id="address"
                   name="address"
                   cols="30" rows="5"
                   placeholder="Address"
-                  value={this.state.address}
-                  onChange={(event) => this.inputChangedHandler(event)}>
-              </textarea>
-            </div>
+                  label="Address"
+                  component={this.renderTextArea}
+                  wrapperclassname="col-lg-12 text-left"
+                />
           </div>
-          <br />
 
           <div className="row col-lg-10 mx-auto">
-            <div className="col-lg-12 text-left">
-              <label>Skills*</label>
-              <input
-                className="form-control"
-                name="skills"
-                type="text"
-                placeholder="Skills"
-                value={this.state.skills}
-                onChange={(event) => this.inputChangedHandler(event)}/>
+            <Field
+              className="form-control"
+              name="skills"
+              type="text"
+              label="Skills"
+              placeholder="Skills"
+              component={this.renderInput}
+              wrapperclassname="col-lg-12 text-left"
+            />
             </div>
-          </div>
-          <br />
+            <br />
 
           <div className="container text-center">
-            <button className="btn-info" onClick={(event) => this.onSubmitHandler(event)}>Next</button>
+            <button type="submit" className="btn-info" >Next</button>
           </div>
       <br />
         </form>
@@ -133,5 +146,37 @@ class PersonalDetailsForm extends Component {
     );
   }
 }
+
+const validate = values => {
+  const errors = {};
+
+  if(!values.name) {
+    errors.name = 'required';
+  }
+
+  if(!values.email) {
+    errors.email = 'required';
+  }
+
+  if(!values.phone) {
+    errors.phone = 'required';
+  }
+
+  if(!values.address) {
+    errors.address = 'required';
+  }
+
+  if(!values.skills) {
+    errors.skills = 'required';
+  }
+
+  return errors;
+}
+
+PersonalDetailsForm = reduxForm({
+  form: 'personal',
+  validate,
+  destroyOnUnmount: false
+})(PersonalDetailsForm)
 
 export default PersonalDetailsForm;

@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Field, reduxForm  } from 'redux-form';
+
 
 class ProjectsForm extends Component {
   constructor(props) {
@@ -14,11 +16,11 @@ class ProjectsForm extends Component {
   }
 
   focusTextInput = () => {
-    this.textInput.current.focus();
+    //this.textInput.current.focus();
   }
 
   componentDidMount() {
-    this.focusTextInput();
+    //this.focusTextInput();
   }
 
 
@@ -29,17 +31,40 @@ class ProjectsForm extends Component {
     })
   }
 
-  onSubmitHandler = (event) => {
-    event.preventDefault();
-    this.props.onSubmit(this.state, this.formIdentifier);
-    this.setState({
-      title: '',
-      link: '',
-      description: ''
-    });
+  onSubmitHandler = (values) => {
+    this.props.onSubmit(values, this.formIdentifier);
+  }
+
+  renderInput = ({ input, meta, ...custom }) => {
+    return(
+      <div className={custom.wrapperclassname}>
+        <label>{custom.label}*</label>
+        <input
+          {...input}
+          {...custom}
+        />
+            { meta.error && meta.touched && <span className="form-text text-muted">{meta.error}</span> }
+          </div>
+    )
+  }
+
+  renderTextArea = ({ input, meta, ...custom }) => {
+    return(
+      <div className={custom.wrapperclassname}>
+        <label>{custom.label}*</label>
+        <textarea
+          {...input}
+          {...custom}
+        />
+            { meta.error && meta.touched && <span className="form-text text-muted">{meta.error}</span> }
+          </div>
+    )
   }
 
   render () {
+
+    const { handleSubmit } = this.props;
+
     return(
 
       <div className="container col-lg-8 mx-auto text-center">
@@ -48,49 +73,46 @@ class ProjectsForm extends Component {
             <h3 className="card-title">Projects Info</h3>
             <hr/>
           </div>
-          <form>
+          <form onSubmit={ handleSubmit(this.onSubmitHandler) }>
 
             <div className="row col-lg-10 mx-auto">
-              <div className="col-lg-6 text-left">
-                <label>Title*</label>
-                <input
-                  ref={ this.textInput }
+                <Field
                   className="form-control"
                   name="title"
                   type="text"
                   placeholder="Title"
-                  value={this.state.title}
-                  onChange={(event) => this.inputChangedHandler(event)} />
-              </div>
-              <div className="col-lg-6 text-left">
-                <label>Link</label>
-                <input
+                  label="Title"
+                  component={this.renderInput}
+                  wrapperclassname="col-lg-6 text-left"
+                />
+
+                <Field
                   className="form-control"
                   name="link"
                   type="text"
                   placeholder="Link"
-                  value={this.state.link}
-                  onChange={(event) => this.inputChangedHandler(event)}/>
-              </div>
+                  label="Link"
+                  component={this.renderInput}
+                  wrapperclassname="col-lg-6 text-left"
+                />
             </div>
             <br />
             <div className="row col-lg-10 mx-auto">
-              <div className="col-lg-12 text-left">
-                <label>Description*</label>
-                <input
+                <Field
                   className="form-control"
                   name="description"
                   type="text"
                   placeholder="Description"
-                  value={this.state.description}
-                  onChange={(event) => this.inputChangedHandler(event)}/>
-              </div>
+                  label="Description"
+                  component={this.renderTextArea}
+                  wrapperclassname="col-lg-12 text-left"
+                />
             </div>
             <br />
 
             <div className="container text-center">
               <button className="btn-info" onClick={this.props.previousPage}>Back</button>
-              <button className="btn-info" onClick={(event) => this.onSubmitHandler(event)}>Next</button>
+              <button type="submit" className="btn-info">Next</button>
             </div>
             <br />
           </form>
@@ -103,5 +125,30 @@ class ProjectsForm extends Component {
     );
   }
 }
+
+const validate = values => {
+  const errors = {};
+
+  if(!values.title) {
+    errors.title = 'required';
+  }
+
+  //if(!values.link) {
+    //errors.link = 'required';
+  //}
+
+  if(!values.description) {
+    errors.description = 'required';
+  }
+
+  return errors;
+}
+
+ProjectsForm = reduxForm({
+  form: 'project',
+  validate,
+  destroyOnUnmount: false
+})(ProjectsForm)
+
 
 export default ProjectsForm;

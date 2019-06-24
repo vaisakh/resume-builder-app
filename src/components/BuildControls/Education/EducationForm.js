@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Field, reduxForm  } from 'redux-form';
 
 class EducationForm extends Component {
   constructor(props) {
@@ -15,11 +16,11 @@ class EducationForm extends Component {
   }
 
   componentDidMount() {
-    this.focusTextInput();
+    //this.focusTextInput();
   }
 
   focusTextInput = () => {
-    this.textInput.current.focus();
+    //this.textInput.current.focus();
   }
 
   inputChangedHandler = (event) => {
@@ -28,18 +29,40 @@ class EducationForm extends Component {
     })
   }
 
-  onSubmitHandler = (event) => {
-    event.preventDefault();
-    this.props.onSubmit(this.state, this.formIdentifier);
-    this.setState({
-      college: '',
-      year: '',
-      qualification: '',
-      description: ''
-    });
+  onSubmitHandler = (values) => {
+    this.props.onSubmit(values, this.formIdentifier);
+  }
+
+  renderInput = ({ input, meta, ...custom }) => {
+    return(
+      <div className={custom.wrapperclassname}>
+        <label>{custom.label}*</label>
+        <input
+          {...input}
+          {...custom}
+        />
+            { meta.error && meta.touched && <span className="form-text text-muted">{meta.error}</span> }
+          </div>
+    )
+  }
+
+  renderTextArea = ({ input, meta, ...custom }) => {
+    return(
+      <div className={custom.wrapperclassname}>
+        <label>{custom.label}*</label>
+        <textarea
+          {...input}
+          {...custom}
+        />
+            { meta.error && meta.touched && <span className="form-text text-muted">{meta.error}</span> }
+          </div>
+    )
   }
 
   render () {
+
+    const { handleSubmit } = this.props;
+
     return(
 
       <div className="container col-lg-8 mx-auto text-center">
@@ -48,61 +71,55 @@ class EducationForm extends Component {
             <h3 className="card-title">Education Info</h3>
             <hr/>
           </div>
-          <form>
+          <form onSubmit={ handleSubmit( this.onSubmitHandler ) }>
 
             <div className="row col-lg-10 mx-auto">
-              <div className="col-lg-4 text-left">
-                <label>College/University*</label>
-                <input
-                  ref={ this.textInput }
-                  className="form-control"
-                  name="college"
-                  type="text"
-                  placeholder="College"
-                  value={this.state.college}
-                  onChange={(event) => this.inputChangedHandler(event)} />
-              </div>
-              <div className="col-lg-4 text-left">
-                <label>Year*</label>
-                <input
+              <Field
+                className="form-control"
+                name="college"
+                type="text"
+                placeholder="College"
+                label="College"
+                component={this.renderInput}
+                wrapperclassname="col-lg-4 text-left"
+              />
+                <Field
                   className="form-control"
                   name="year"
                   type="text"
                   placeholder="Year"
-                  value={this.state.year}
-                  onChange={(event) => this.inputChangedHandler(event)}/>
-              </div>
-
-              <div className="col-lg-4 text-left">
-                <label>Qualification*</label>
-                <input
-                  className="form-control"
-                  name="qualification"
-                  type="text"
-                  placeholder="Qualification"
-                  value={this.state.qualification}
-                  onChange={(event) => this.inputChangedHandler(event)}/>
-              </div>
+                  label="Year"
+                  component={this.renderInput}
+                  wrapperclassname="col-lg-4 text-left"
+                />
+                  <Field
+                    className="form-control"
+                    name="qualification"
+                    type="text"
+                    placeholder="Qualification"
+                    label="Qualification"
+                    component={this.renderInput}
+                    wrapperclassname="col-lg-4 text-left"
+                  />
             </div>
             <br />
 
             <div className="row col-lg-10 mx-auto">
-              <div className="col-lg-12 text-left">
-                <label>Description*</label>
-                <input
-                  className="form-control"
-                  name="description"
-                  type="text"
-                  placeholder="Description"
-                  value={this.state.description}
-                  onChange={(event) => this.inputChangedHandler(event)}/>
-              </div>
+              <Field
+                className="form-control"
+                name="description"
+                type="text"
+                placeholder="Description"
+                label="Description"
+                component={this.renderTextArea}
+                wrapperclassname="col-lg-12 text-left"
+              />
             </div>
             <br />
 
             <div className="container text-center">
               <button className="btn-info" onClick={this.props.previousPage}>Back</button>
-              <button className="btn-info" onClick={(event) => this.onSubmitHandler(event)}>Next</button>
+              <button type="submit" className="btn-info">Next</button>
             </div>
             <br />
           </form>
@@ -115,5 +132,33 @@ class EducationForm extends Component {
     );
   }
 }
+
+const validate = values => {
+  const errors = {};
+
+  if(!values.college) {
+    errors.college = 'required';
+  }
+
+  if(!values.year) {
+    errors.year = 'required';
+  }
+
+  if(!values.qualification) {
+    errors.qualification = 'required;'
+  }
+
+  if(!values.description) {
+    errors.description = 'required';
+  }
+
+  return errors;
+}
+
+EducationForm = reduxForm({
+  form: 'education',
+  validate,
+  destroyOnUnmount: false
+})(EducationForm)
 
 export default EducationForm;

@@ -1,7 +1,13 @@
 import { NEW_PERSONAL_INFO } from '../actions/types';
 
 const initialState = {
-  person: {}
+  person: {
+    name: '',
+    email: '',
+    phone: '',
+    address: '',
+    skills: ''
+  }
 }
 
 const personalInfoReducer = (state = initialState, action) => {
